@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/BooksBackgroundColor">
+
+    <ImageView
+        android:id="@+id/book_image"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/BookTitle"
+            tools:text="Mohanad Elmaghrby"
+            android:padding="@dimen/list_item_bookTitle_padding"/>
+
+        <TextView
+            android:id="@+id/book_authors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/BookAuthors"
+            android:paddingLeft="@dimen/list_item_bookTitle_padding"
+            android:paddingRight="@dimen/list_item_bookTitle_padding"
+            tools:text="mohanad , ahmed nagy , abas"/>
+
+        <RatingBar
+            android:id="@+id/ratting_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
+            android:stepSize=".5"
+            tools:rating="2.5"
+            android:background="@color/BookTitleColor"
+            android:layout_margin="@dimen/list_item_bookTitle_padding"/>
+
+    </LinearLayout>
+
+</LinearLayout>

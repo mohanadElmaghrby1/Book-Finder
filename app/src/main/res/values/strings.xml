@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Boook Finder</string>
+    <!--the book search hint-->
+    <string name="search_books">Enter Book Title</string>
+    <!--the book search button-->
+    <string name="search_button">Search</string>
+    <!--no internet connection-->
+    <string name="no_internet_message">no internet connection</string>
+    <!--no data found-->
+    <string name="no_book_found_message">no book found</string>
+</resources>

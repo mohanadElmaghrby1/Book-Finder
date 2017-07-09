@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="apps.mohanad.com.boookfinder.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/book_background" />
+
+    <EditText
+        android:id="@+id/search_viewr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_books"
+        style="@style/SearchText"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SearchText"
+        android:layout_below="@id/search_viewr"
+        android:text="@string/search_button"
+        android:textStyle="bold"
+        android:onClick="search"/>
+
+</RelativeLayout>
