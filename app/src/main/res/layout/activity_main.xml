@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/book_background" />
+        android:src="@mipmap/book_background" />
 
     <EditText
         android:id="@+id/search_viewr"

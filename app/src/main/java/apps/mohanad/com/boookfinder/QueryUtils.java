@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by mohanad on 03/07/17.
  */
 
-public  class QueryUtils {
+public class QueryUtils {
 
     /**
      * Tag for the log messages
@@ -31,7 +31,7 @@ public  class QueryUtils {
     /**
      * Query the url and return an {@link Book} object to represent a list of books.
      */
-    public static ArrayList<Book> fetchListOfBookData(String requestUrl)  {
+    public static ArrayList<Book> fetchListOfBookData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -43,7 +43,7 @@ public  class QueryUtils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        Log.v("son",jsonResponse);
+        Log.v("son", jsonResponse);
         // Extract relevant fields from the JSON response and create an {@link Book} object
         ArrayList<Book> earthquake = extractFeatureFromJson(jsonResponse);
 
@@ -103,14 +103,12 @@ public  class QueryUtils {
                 urlConnection.disconnect();
             }
             if (inputStream != null) {
-
                 inputStream.close();
             }
         }
 
         return jsonResponse;
     }
-
 
 
     /**
@@ -135,70 +133,81 @@ public  class QueryUtils {
      * Return an {@link Book} object by parsing out information
      * about the a list of books from the input BookJSON string.
      */
-    private static ArrayList<Book> extractFeatureFromJson(String BookJSON ) {
+    private static ArrayList<Book> extractFeatureFromJson(String BookJSON) {
+        //the result list of books
+        ArrayList<Book> resultList = new ArrayList<>();
 
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(BookJSON)) {
-            return null;
+            return resultList;
         }
-        //the result list of books
-        ArrayList<Book> resultList = new ArrayList<>();
+
 
         try {
             //get the base json
             JSONObject baseJsonResponse = new JSONObject(BookJSON);
-            // get the json arrays of books
-            JSONArray resultsArray = baseJsonResponse.getJSONArray("items");
-            //iterate throw books and add to list
-            for (int i = 0; i < resultsArray.length(); ++i) {
-                //get the ith json recipes
-                JSONObject book = resultsArray.getJSONObject(i);
 
-                String id="",jsonUrl="",title="";
-                //extract the recipes data
-                 id = book.getString("id");
+            if (baseJsonResponse.has("items")) {
+                // get the json arrays of books
+                JSONArray resultsArray = baseJsonResponse.getJSONArray("items");
+                //iterate throw books and add to list
+                for (int i = 0; i < resultsArray.length(); ++i) {
+                    //get the ith json recipes
+                    JSONObject book = resultsArray.getJSONObject(i);
 
-                //getting the book url
-                 jsonUrl = book.getString("selfLink");
+                    String id = "", jsonUrl = "", title = "";
 
-                //get the ith json recipes
-                JSONObject volumeInfo = book.getJSONObject("volumeInfo");
-                //getting the book title
-                 title = volumeInfo.getString("title");
+                    if (book.has("id")) {
+                        //extract the recipes data
+                        id = book.getString("id");
+                    }
 
-                //getting the book authors
-                StringBuilder bookAuthors=new StringBuilder();
-                JSONArray authorsArray = volumeInfo.getJSONArray("authors");
-                for (int j = 0 ; j <authorsArray.length() ; ++j){
-                    String author =authorsArray.getString(j);
-                    bookAuthors.append(author+" , ");
+                    if (book.has("selfLink")) {
+                        //getting the book url
+                        jsonUrl = book.getString("selfLink");
+                    }
+
+                    StringBuilder bookAuthors = new StringBuilder();
+                    String imageUrl = "";
+                    float rating = 0.0f;
+
+                    if (book.has("volumeInfo")) {
+                        JSONObject volumeInfo = book.getJSONObject("volumeInfo");
+                        if (volumeInfo.has("title")) {
+                            title = volumeInfo.getString("title");
+                        }
+                        if (volumeInfo.has("authors")) {
+                            JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                            for (int j = 0; j < authorsArray.length(); ++j) {
+                                String author = authorsArray.getString(j);
+                                bookAuthors.append(author + " , ");
+                            }
+                        }
+
+                        if (volumeInfo.has("imageLinks")) {
+                            JSONObject imagJsonObject = volumeInfo.getJSONObject("imageLinks");
+                            if (imagJsonObject.has("thumbnail")) {
+                                //getting the book image link
+                                imageUrl = imagJsonObject.getString("thumbnail");
+                            }
+                        }
+
+                        if (volumeInfo.has("averageRating")) {
+                            //getting the book averageRating
+                            rating = (float) volumeInfo.getDouble("averageRating");
+                        }
+                    }
+
+                    //create a new recipe object and add to the list
+                    resultList.add(new Book(id, title, bookAuthors.toString(), imageUrl, rating, jsonUrl));
                 }
 
-                //getting the book image link
-                String imageUrl =volumeInfo.getJSONObject("imageLinks").getString("thumbnail");
-                float rating=0.0f;
-                try {
-                    //getting the book averageRating
-                     rating =(float) volumeInfo.getDouble("averageRating");
-                } catch (Exception e){
-                    //rating not found
-                }
-
-
-
-
-                //create a new recipe object and add to the list
-                resultList.add(new Book(id,title,bookAuthors.toString() ,imageUrl , rating,jsonUrl));
+                //return the list
+                return resultList;
             }
-
-            //return the list
-            return resultList;
-
         } catch (JSONException e) {
-//            Log.e(LOG_TAG, "Problem parsing the Book JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the Book JSON results", e);
         }
-
         return resultList;
     }
-
 }

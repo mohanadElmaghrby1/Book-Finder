@@ -49,9 +49,14 @@ public class BookAdapter extends ArrayAdapter<Book> {
         /*get the recipe image and set display to the ui*/
         ImageView img=(ImageView)convertView.findViewById(R.id.book_image);
         String imageUrl=book.getImageUrl();
-        //load image from url and dsiplay to ui
-        Picasso.with(getContext()).load(imageUrl).into(img);
 
+        //check that book  have image
+        if (imageUrl.length()>10){
+            //load image from url and dsiplay to ui
+            Picasso.with(getContext()).load(imageUrl).into(img);
+        }else {
+            img.setImageResource(R.mipmap.no_img);
+        }
 
         return  convertView;
     }
